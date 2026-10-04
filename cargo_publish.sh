@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -euxo pipefail
 
@@ -6,8 +6,15 @@ set -euxo pipefail
     cargo +stable publish
 )
 
-for i in $(seq 10)
+for attempt in $(seq 10)
 do
-    cargo +stable publish && break
-    sleep 5
+    if cargo +stable publish; then
+        exit 0
+    fi
+    if [[ "$attempt" -lt 10 ]]; then
+        sleep 5
+    fi
 done
+
+echo "Failed to publish method_name after 10 attempts" >&2
+exit 1

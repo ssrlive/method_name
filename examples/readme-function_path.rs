@@ -3,7 +3,7 @@ extern crate method_name;
 
 macro_rules! function_path {
     () => {
-        concat!(module_path!(), "::", function_name!())
+        concat!(module_path!(), "::", method_name!())
     };
 }
 

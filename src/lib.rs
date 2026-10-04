@@ -3,6 +3,9 @@
 )]
 #![doc(test(attr(deny(warnings), allow(unused),)))]
 //! Attribute macro exposing the current function's name.
+//!
+//! Apply `#[named]` to an `impl` block to include the enclosing type in
+//! `method_name!()` within its methods, such as `Session::new`.
 #![warn(missing_docs)]
 #![no_std]
 
@@ -14,7 +17,7 @@ use ::method_name::named;
 #[named]
 fn foo ()
 {
-    assert_eq!(function_name!(), "foo");
+    assert_eq!(method_name!(), "foo");
 }
 
 fn main() {
@@ -32,7 +35,8 @@ pub mod __private {
 
 /// Helper macro to get the fully qualified name of current function
 #[macro_export]
-macro_rules! method_name_full {
+#[doc(hidden)]
+macro_rules! method_name_unstable {
     () => {{
         fn f() {}
         fn type_name_of<T>(_: T) -> &'static str {

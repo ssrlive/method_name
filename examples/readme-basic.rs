@@ -2,7 +2,7 @@ use ::method_name::named;
 
 #[named]
 fn my_super_duper_function() {
-    dbg!(function_name!());
+    dbg!(method_name!());
 }
 
 fn main() {
