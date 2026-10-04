@@ -9,15 +9,13 @@ on:
 jobs:
   # == CHECK == #
   check:
-    name: "Check beta stable and MSRV=1.45.0"
+    name: Check stable and beta
     runs-on: ubuntu-latest
     strategy:
       matrix:
         rust-toolchains:
-          - 1.45.0
           - stable
           - beta
-        cargo-locked: ["--locked", ""]
     steps:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
@@ -29,15 +27,10 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@v2
 
-      - name: Update `Cargo.lock`
-        if: matrix.cargo-locked != '--locked'
-        run: rm Cargo.lock
-
       - name: Cargo check
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: ${{ matrix.cargo-locked }}
 
   # == BUILD & TEST == #
   build-and-test:
@@ -52,7 +45,6 @@ jobs:
           - macos-latest
           - windows-latest
         rust-toolchains:
-          - 1.45.0
           - stable
     steps:
       - name: Install Rust toolchain
@@ -65,16 +57,14 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@v2
 
-      - name: Cargo test (no raw identifier)
-        if: matrix.rust-toolchains == '1.45.0'
+      - name: Cargo test
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: ${{ matrix.cargo-locked }}
+          args: --no-default-features
 
       - name: Cargo test (all)
-        if: matrix.rust-toolchains != '1.45.0'
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: ${{ matrix.cargo-locked }} --features better-docs
+          args: --features better-docs

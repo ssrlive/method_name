@@ -11,4 +11,4 @@ find . \
         sed -i -E "s/\".*?\"(  # Keep in sync)/\"$1\"\\1/g" '{}' \
     \;
 
-cargo update -v -p function_name
+cargo update -v -p method_name

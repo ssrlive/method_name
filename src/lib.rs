@@ -1,24 +1,62 @@
 #![cfg_attr(feature = "better-docs",
     cfg_attr(all(), doc = include_str!("../README.md")),
 )]
-#![doc(test(attr(
-    deny(warnings), allow(unused),
-)))]
-//!
+#![doc(test(attr(deny(warnings), allow(unused),)))]
+//! Attribute macro exposing the current function's name.
 #![warn(missing_docs)]
-
 #![no_std]
 
 /// Entry point of the crate.
 ///
 /** ```rust
-use ::function_name::named;
+use ::method_name::named;
 
-#[test]
 #[named]
 fn foo ()
 {
     assert_eq!(function_name!(), "foo");
 }
+
+fn main() {
+    foo();
+}
 ``` */
-pub use ::function_name_proc_macro::named;
+pub use ::method_name_proc_macro::named;
+
+extern crate alloc;
+
+#[doc(hidden)]
+pub mod __private {
+    pub use alloc::{borrow::Cow, format};
+}
+
+/// Helper macro to get the fully qualified name of current function
+#[macro_export]
+macro_rules! method_name_full {
+    () => {{
+        fn f() {}
+        fn type_name_of<T>(_: T) -> &'static str {
+            core::any::type_name::<T>()
+        }
+        let prefix = concat!(module_path!(), "::");
+        let name = type_name_of(f);
+        let name = name.strip_suffix("::f").unwrap_or(name);
+        let name = name.trim_end_matches("::{{closure}}");
+        if let Some((type_name, trait_and_method)) = name
+            .strip_prefix('<')
+            .and_then(|name| name.split_once(" as "))
+        {
+            match type_name.strip_prefix(prefix) {
+                Some(type_name) => match trait_and_method.rsplit_once(">::") {
+                    Some((_, method_name)) => $crate::__private::Cow::Owned(
+                        $crate::__private::format!("{type_name}::{method_name}"),
+                    ),
+                    None => $crate::__private::Cow::Borrowed(name),
+                },
+                None => $crate::__private::Cow::Borrowed(name),
+            }
+        } else {
+            $crate::__private::Cow::Borrowed(name.strip_prefix(prefix).unwrap_or(name))
+        }
+    }};
+}
