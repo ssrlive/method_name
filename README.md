@@ -1,6 +1,6 @@
 ## `::method_name`
 
-> This crate is a fork of https://github.com/danielhenrymantilla/rust-function_name
+> This crate is a fork of <https://github.com/danielhenrymantilla/rust-function_name>
 
 Function attribute `#[named]` that generates a `method_name!` macro
 in the scope of the function's body.
@@ -75,6 +75,27 @@ pub mod foo {
             );
         }
     }
+}
+```
+
+### Unstable API
+
+The `method_name_unstable!()` macro is available when the `unstable` feature is
+enabled. This API may change in future releases.
+
+Enable the feature in your dependency declaration:
+
+```toml
+method_name = { version = "0.3", features = ["unstable"] }
+```
+
+Then import and call the macro from your crate:
+
+```rust
+use method_name::method_name_unstable;
+
+fn foo() {
+    assert_eq!(method_name_unstable!(), "foo");
 }
 ```
 

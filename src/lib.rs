@@ -33,9 +33,12 @@ pub mod __private {
     pub use alloc::{borrow::Cow, format};
 }
 
-/// Helper macro to get the fully qualified name of current function
+/// Returns the fully qualified name of the current function.
+///
+/// This macro is available when the `unstable` feature is enabled.
+/// It means the result may be not fit the expected format in the future.
+#[cfg(feature = "unstable")]
 #[macro_export]
-#[doc(hidden)]
 macro_rules! method_name_unstable {
     () => {{
         fn f() {}

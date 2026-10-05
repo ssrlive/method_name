@@ -67,4 +67,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --features better-docs
+          args: --features better-docs,unstable

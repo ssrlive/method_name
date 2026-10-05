@@ -1,7 +1,7 @@
 [package]
 name = "method_name"
-version = "0.3.1"                                                     # Keep in sync
-authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
+version = "0.3.1"                                                                # Keep in sync
+authors = ["ssrlive", "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
 edition = "2024"
 
 description = "macro that expands to the name of the annotated function"
@@ -27,12 +27,13 @@ path = "proc-macro"
 tokio = { version = "1", features = ["macros", "rt"] }
 
 [features]
-# default = ["docs-rs"]
+# default = ["docs-rs", "unstable"]
 docs-rs = ["better-docs"]
 better-docs = []
+unstable = []
 
 [workspace]
 members = ["proc-macro"]
 
 [package.metadata.docs.rs]
-features = ["docs-rs"]
+features = ["docs-rs", "unstable"]
