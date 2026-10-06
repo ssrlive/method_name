@@ -15,7 +15,7 @@
 use ::method_name::named;
 
 #[named]
-fn foo ()
+fn foo()
 {
     assert_eq!(method_name!(), "foo");
 }
@@ -26,10 +26,10 @@ fn main() {
 ``` */
 pub use ::method_name_proc_macro::named;
 
-extern crate alloc;
-
 #[doc(hidden)]
+#[cfg(feature = "unstable")]
 pub mod __private {
+    extern crate alloc;
     pub use alloc::{borrow::Cow, format};
 }
 
