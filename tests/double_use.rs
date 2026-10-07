@@ -1,7 +1,10 @@
 #[cfg(feature = "unstable")]
 use method_name::method_name_unstable;
+
+#[cfg(feature = "std")]
 use method_name::named;
 
+#[cfg(feature = "std")]
 #[named]
 fn foo() {
     assert_eq!(method_name!(), "foo");
@@ -9,6 +12,7 @@ fn foo() {
     assert_eq!(method_name_unstable!(), "foo");
 }
 
+#[cfg(feature = "std")]
 #[named]
 fn bar() {
     assert_eq!(method_name!(), "bar");
@@ -16,6 +20,7 @@ fn bar() {
     assert_eq!(method_name_unstable!(), "bar");
 }
 
+#[cfg(feature = "std")]
 #[named]
 async fn async_function() {
     tokio::task::yield_now().await;
@@ -25,16 +30,18 @@ async fn async_function() {
     assert_eq!(method_name_unstable!(), "async_function");
 }
 
+#[cfg(feature = "unstable")]
 fn function_with_closure() {
     let closure = || {
-        #[cfg(feature = "unstable")]
         assert_eq!(method_name_unstable!(), "function_with_closure");
     };
     closure();
 }
 
+#[cfg(feature = "std")]
 struct LegacySession;
 
+#[cfg(feature = "std")]
 impl LegacySession {
     #[named]
     fn new() {
@@ -42,8 +49,10 @@ impl LegacySession {
     }
 }
 
+#[cfg(feature = "std")]
 struct Session;
 
+#[cfg(feature = "std")]
 #[named]
 impl Session {
     fn new() -> Self {
@@ -67,16 +76,20 @@ impl Session {
     }
 }
 
+#[cfg(feature = "std")]
 trait FirstName {
     fn same_name(&self);
 }
 
+#[cfg(feature = "std")]
 trait SecondName {
     fn same_name(&self);
 }
 
+#[cfg(feature = "std")]
 struct SharedMethods;
 
+#[cfg(feature = "std")]
 #[named]
 impl FirstName for SharedMethods {
     fn same_name(&self) {
@@ -85,6 +98,7 @@ impl FirstName for SharedMethods {
     }
 }
 
+#[cfg(feature = "std")]
 #[named]
 impl SecondName for SharedMethods {
     fn same_name(&self) {
@@ -93,6 +107,7 @@ impl SecondName for SharedMethods {
     }
 }
 
+#[cfg(feature = "std")]
 #[named]
 impl Drop for Session {
     fn drop(&mut self) {
@@ -103,6 +118,7 @@ impl Drop for Session {
     }
 }
 
+#[cfg(feature = "std")]
 #[test]
 fn main() {
     foo();
@@ -110,11 +126,13 @@ fn main() {
     LegacySession::new();
     let session = Session::new();
     session.generic(42_u8);
+    #[cfg(feature = "unstable")]
     function_with_closure();
     FirstName::same_name(&SharedMethods);
     SecondName::same_name(&SharedMethods);
 }
 
+#[cfg(feature = "std")]
 #[tokio::test]
 async fn async_names_survive_await() {
     async_function().await;

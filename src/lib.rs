@@ -24,6 +24,7 @@ fn main() {
     foo();
 }
 ``` */
+#[cfg(feature = "std")]
 pub use ::method_name_proc_macro::named;
 
 #[doc(hidden)]

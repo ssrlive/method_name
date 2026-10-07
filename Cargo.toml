@@ -19,21 +19,34 @@ keywords = [
 readme = "README.md"
 license = "MIT"
 
-[dependencies.method_name_proc_macro]
-version = "0.3.2"   # Keep in sync
-path = "proc-macro"
-
-[dev-dependencies]
-tokio = { version = "1", features = ["macros", "rt"] }
-
-[features]
-# default = ["docs-rs", "unstable"]
-docs-rs = ["better-docs"]
-better-docs = []
-unstable = []
+[package.metadata.docs.rs]
+features = ["std", "docs-rs", "unstable"]
 
 [workspace]
 members = ["proc-macro"]
 
-[package.metadata.docs.rs]
-features = ["docs-rs", "unstable"]
+[features]
+default = ["std"]
+# default = ["std", "docs-rs", "unstable"]
+std = ["dep:method_name_proc_macro"]
+docs-rs = ["better-docs"]
+better-docs = []
+unstable = []
+
+[dependencies.method_name_proc_macro]
+version = "0.3.2"   # Keep in sync
+path = "proc-macro"
+optional = true
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[[example]]
+name = "readme-basic"
+path = "examples/readme-basic.rs"
+required-features = ["std"]
+
+[[example]]
+name = "readme-function_path"
+path = "examples/readme-function_path.rs"
+required-features = ["std"]
