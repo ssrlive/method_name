@@ -1,6 +1,6 @@
 [package]
 name = "method_name"
-version = "0.3.2"                                                                # Keep in sync
+version = "0.3.3"                                                                # Keep in sync
 authors = ["ssrlive", "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
 edition = "2024"
 
@@ -34,7 +34,7 @@ better-docs = []
 unstable = []
 
 [dependencies.method_name_proc_macro]
-version = "0.3.2"   # Keep in sync
+version = "0.3.3"   # Keep in sync
 path = "proc-macro"
 optional = true
 
