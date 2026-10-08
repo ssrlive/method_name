@@ -48,8 +48,10 @@ macro_rules! method_name_unstable {
         }
         let prefix = concat!(module_path!(), "::");
         let name = type_name_of(f);
-        let name = name.strip_suffix("::f").unwrap_or(name);
-        let name = name.trim_end_matches("::{{closure}}");
+        let mut name = name.strip_suffix("::f").unwrap_or(name);
+        while let Some(head) = name.strip_suffix("::{{closure}}") {
+            name = head;
+        }
         if let Some((type_name, trait_and_method)) = name
             .strip_prefix('<')
             .and_then(|name| name.split_once(" as "))
